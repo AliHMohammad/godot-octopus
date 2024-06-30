@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://donasgb5tjdl8"]
+[gd_scene load_steps=8 format=3 uid="uid://donasgb5tjdl8"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_7dlon"]
 [ext_resource type="PackedScene" uid="uid://cj2gkepwpcl1p" path="res://scenes/player.tscn" id="1_dn1o6"]
 [ext_resource type="PackedScene" uid="uid://c8m7rtwddgo70" path="res://scenes/mob.tscn" id="2_sypc6"]
+[ext_resource type="PackedScene" uid="uid://by0ef8u84yiv1" path="res://HUD.tscn" id="4_vwigw"]
+[ext_resource type="AudioStream" uid="uid://dvpwvuiimbmlu" path="res://art/House In a Forest Loop.ogg" id="5_afpyd"]
+[ext_resource type="AudioStream" uid="uid://cs66jkkk25wm2" path="res://art/gameover.wav" id="6_4fy5s"]
 
 [sub_resource type="Curve2D" id="Curve2D_hijhj"]
 _data = {
@@ -13,6 +16,14 @@ point_count = 5
 [node name="Main" type="Node"]
 script = ExtResource("1_7dlon")
 MobScene = ExtResource("2_sypc6")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105882, 0.172549, 0.427451, 1)
 
 [node name="Player" parent="." instance=ExtResource("1_dn1o6")]
 position = Vector2(222, 234)
@@ -34,7 +45,16 @@ curve = SubResource("Curve2D_hijhj")
 
 [node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 
+[node name="HUD" parent="." instance=ExtResource("4_vwigw")]
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_afpyd")
+
+[node name="Deathsound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_4fy5s")
+
 [connection signal="Hit" from="Player" to="." method="GameOver"]
 [connection signal="timeout" from="MobTimer" to="." method="OnMobTimerTimeout"]
-[connection signal="timeout" from="ScoreTimer" to="." method="onScoreTimerTimeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="OnScoreTimerTimeout"]
 [connection signal="timeout" from="StartTimer" to="." method="OnStartTimerTimeout"]
+[connection signal="StartGame" from="HUD" to="." method="NewGame"]
